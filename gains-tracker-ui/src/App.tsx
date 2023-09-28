@@ -7,13 +7,28 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from "@mui/material/Drawer";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 function App() {
-  return (
+    const [open, setOpen] = React.useState(false);
+
+    function openDrawer() {
+        setOpen(true);
+    }
+
+    function closeDrawer() {
+        setOpen(false);
+    }
+
+    return (
     <>
         <AppBar position="static">
             <Toolbar>
-                <IconButton color="inherit">
+                <IconButton
+                    color="inherit"
+                    onClick={openDrawer}
+                >
                     <MenuIcon />
                 </IconButton>
 
@@ -22,6 +37,19 @@ function App() {
                 <Button color="inherit">Login</Button>
             </Toolbar>
         </AppBar>
+        <Drawer
+            variant="persistent"
+            anchor="left"
+            open={open}
+        >
+            <IconButton
+                color="inherit"
+                onClick={closeDrawer}
+            >
+                <ChevronLeftIcon  />
+            </IconButton>
+            <p>Drawer placeholder</p>
+        </Drawer>
         <Container>
             Welcome to Gains Tracker!
         </Container>
