@@ -11,3 +11,11 @@ services:
     - 5432:5432
     networks:
       - default
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+    ports:
+    - 8000:8000
+    networks:
+      - default
