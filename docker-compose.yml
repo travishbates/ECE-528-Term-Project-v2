@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  postgres:
+    container_name: postgres
+    build:
+      context: ./database
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+    - 5432:5432
+    networks:
+      - default
