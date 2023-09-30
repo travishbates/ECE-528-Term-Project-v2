@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from "@mui/material/Drawer";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import TransactionTable from "./TransactionTable";
 
 function App() {
     const [open, setOpen] = React.useState(false);
@@ -53,6 +54,7 @@ function App() {
         <Container>
             Welcome to Gains Tracker!
         </Container>
+        <TransactionTable></TransactionTable>
     </>
   )
 }
