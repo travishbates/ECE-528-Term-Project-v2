@@ -1,8 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+Engine = create_engine("postgresql://postgres:password@localhost:5432/postgres")
+Session = sessionmaker(Engine)
+Base = declarative_base()
+
+
+class Transaction(Base):
+    __tablename__ = "transaction"
+
+    id = Column(UUID, primary_key=True, index=True)
+    time_transacted = Column(TIMESTAMP)
+    asset_purchased_name = Column(VARCHAR)
+    asset_purchased_quantity = Column(NUMERIC)
+    asset_sold_name = Column(VARCHAR)
+    asset_sold_quantity = Column(NUMERIC)
+
 
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins = [
@@ -31,3 +50,10 @@ def hello_world():
             "assetSoldAmount": 789
         }
     ]
+
+@app.get("/transactions")
+def get_transactions():
+    database = Session()
+    database_results = database.query(Transaction).all()
+    database.close()
+    return database_results
