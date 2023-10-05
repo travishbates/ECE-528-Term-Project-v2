@@ -6,18 +6,30 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import * as React from "react";
-import {useEffect} from "react";
+import { useEffect } from "react";
+import Button from "@mui/material/Button";
+import { getTransactions, deleteTransaction } from "./backendService";
 
 function TransactionTable() {
     const [transactions, setTransactions] = React.useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8000/sample-transactions")
-            .then(response => response.json())
+        handleGetTransactions();
+    }, []);
+
+    function handleGetTransactions() {
+        getTransactions()
             .then((result) => {
                 setTransactions(result);
             });
-    }, []);
+    }
+
+    function handleDeleteTransaction(transactionId) {
+        deleteTransaction(transactionId)
+            .then(() => {
+                handleGetTransactions();
+            });
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -29,16 +41,20 @@ function TransactionTable() {
                         <TableCell>Asset Bought Amount</TableCell>
                         <TableCell>Asset Sold</TableCell>
                         <TableCell>Asset Sold Amount</TableCell>
+                        <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {transactions.map((transaction) => (
-                        <TableRow key={transaction.time}>
-                            <TableCell>{transaction.time}</TableCell>
-                            <TableCell>{transaction.assetBoughtName}</TableCell>
-                            <TableCell>{transaction.assetBoughtAmount}</TableCell>
-                            <TableCell>{transaction.assetSoldName}</TableCell>
-                            <TableCell>{transaction.assetSoldAmount}</TableCell>
+                        <TableRow key={transaction.id}>
+                            <TableCell>{transaction.time_transacted}</TableCell>
+                            <TableCell>{transaction.asset_purchased_name}</TableCell>
+                            <TableCell>{transaction.asset_purchased_quantity}</TableCell>
+                            <TableCell>{transaction.asset_sold_name}</TableCell>
+                            <TableCell>{transaction.asset_sold_quantity}</TableCell>
+                            <TableCell>
+                                <Button color="inherit" onClick={() => handleDeleteTransaction(transaction.id)}>Delete</Button>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

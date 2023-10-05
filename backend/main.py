@@ -57,3 +57,10 @@ def get_transactions():
     database_results = database.query(Transaction).all()
     database.close()
     return database_results
+
+@app.get("/transaction/{id}")
+def delete_transaction(id):
+    database = Session()
+    database.query(Transaction).filter_by(id = id).delete()
+    database.commit()
+    database.close()
