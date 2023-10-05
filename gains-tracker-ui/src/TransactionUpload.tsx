@@ -2,14 +2,17 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import { uploadTransactions } from "./backendService";
 
-function TransactionUpload() {
+function TransactionUpload({ refreshTransactions }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const formData = new FormData(event.target);
 
-        uploadTransactions(formData);
+        uploadTransactions(formData)
+            .then(() => {
+                refreshTransactions();
+            });
     }
 
     return (

@@ -11,9 +11,11 @@ import Drawer from "@mui/material/Drawer";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TransactionTable from "./TransactionTable";
 import TransactionUpload from "./TransactionUpload";
+import { getTransactions } from "./backendService";
 
 function App() {
     const [open, setOpen] = React.useState(false);
+    const [transactions, setTransactions] = React.useState([]);
 
     function openDrawer() {
         setOpen(true);
@@ -21,6 +23,13 @@ function App() {
 
     function closeDrawer() {
         setOpen(false);
+    }
+
+    function refreshTransactions() {
+        getTransactions()
+            .then((result) => {
+                setTransactions(result);
+            });
     }
 
 
@@ -56,8 +65,8 @@ function App() {
         <Container>
             Welcome to Gains Tracker!
         </Container>
-        <TransactionUpload></TransactionUpload>
-        <TransactionTable></TransactionTable>
+        <TransactionUpload refreshTransactions={refreshTransactions}></TransactionUpload>
+        <TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>
     </>
   )
 }

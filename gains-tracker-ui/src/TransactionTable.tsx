@@ -8,26 +8,18 @@ import TableBody from "@mui/material/TableBody";
 import * as React from "react";
 import { useEffect } from "react";
 import Button from "@mui/material/Button";
-import { getTransactions, deleteTransaction } from "./backendService";
+import { deleteTransaction } from "./backendService";
 
-function TransactionTable() {
-    const [transactions, setTransactions] = React.useState([]);
+function TransactionTable({ transactions, refreshTransactions }) {
 
     useEffect(() => {
-        handleGetTransactions();
+        refreshTransactions();
     }, []);
-
-    function handleGetTransactions() {
-        getTransactions()
-            .then((result) => {
-                setTransactions(result);
-            });
-    }
 
     function handleDeleteTransaction(transactionId) {
         deleteTransaction(transactionId)
             .then(() => {
-                handleGetTransactions();
+                refreshTransactions();
             });
     }
 
