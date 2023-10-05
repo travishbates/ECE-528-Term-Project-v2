@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from "@mui/material/Drawer";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TransactionTable from "./TransactionTable";
+import TransactionUpload from "./TransactionUpload";
 
 function App() {
     const [open, setOpen] = React.useState(false);
@@ -21,6 +22,7 @@ function App() {
     function closeDrawer() {
         setOpen(false);
     }
+
 
     return (
     <>
@@ -54,6 +56,7 @@ function App() {
         <Container>
             Welcome to Gains Tracker!
         </Container>
+        <TransactionUpload></TransactionUpload>
         <TransactionTable></TransactionTable>
     </>
   )
