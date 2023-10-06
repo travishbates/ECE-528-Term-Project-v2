@@ -28,7 +28,7 @@ function App() {
     function refreshTransactions() {
         getTransactions()
             .then((result) => {
-                setTransactions(result);
+                setTransactions(result.result);
             });
     }
 
@@ -65,7 +65,6 @@ function App() {
         <Container>
             Welcome to Gains Tracker!
         </Container>
-        <TransactionUpload refreshTransactions={refreshTransactions}></TransactionUpload>
         <TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>
     </>
   )

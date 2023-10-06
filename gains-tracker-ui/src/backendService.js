@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:8000";
 
-export function getTransactions() {
-    return fetch(BASE_URL + "/transactions")
+export function getTransactions(page, pageSize) {
+    return fetch(BASE_URL + "/transactions?page=" + page + "&pageSize=" + pageSize)
         .then(response => response.json());
 }
 

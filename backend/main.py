@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -57,11 +57,17 @@ def hello_world():
     ]
 
 @app.get("/transactions")
-def get_transactions():
+def get_transactions(page: int = 0, pageSize: int = 10):
     database = Session()
-    database_results = database.query(Transaction).all()
+    database_results = database.query(Transaction).offset(page * pageSize).limit(pageSize).all()
+    count = database.query(func.count(Transaction.id)).scalar()
     database.close()
-    return database_results
+    return {
+        "count": count,
+        "page": page,
+        "pageSize": pageSize,
+        "results": database_results
+    }
 
 @app.post("/transactions")
 async def post_transactions(file: UploadFile):
