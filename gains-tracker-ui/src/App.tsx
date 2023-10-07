@@ -12,10 +12,13 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TransactionTable from "./TransactionTable";
 import TransactionUpload from "./TransactionUpload";
 import { getTransactions } from "./backendService";
+import SideNav from "./SideNav";
+import {Routes, Route, useNavigate} from "react-router-dom";
 
 function App() {
-    const [open, setOpen] = React.useState(false);
     const [transactions, setTransactions] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     function openDrawer() {
         setOpen(true);
@@ -32,6 +35,9 @@ function App() {
             });
     }
 
+    const handleNavigate = (route) => {
+        navigate(route);
+    }
 
     return (
     <>
@@ -49,23 +55,16 @@ function App() {
                 <Button color="inherit">Login</Button>
             </Toolbar>
         </AppBar>
-        <Drawer
-            variant="persistent"
-            anchor="left"
-            open={open}
-        >
-            <IconButton
-                color="inherit"
-                onClick={closeDrawer}
-            >
-                <ChevronLeftIcon  />
-            </IconButton>
-            <p>Drawer placeholder</p>
-        </Drawer>
-        <Container>
-            Welcome to Gains Tracker!
-        </Container>
-        <TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>
+        <SideNav open={ open } closeDrawer={ closeDrawer } handleNavigate={handleNavigate}/>
+        <Routes>
+            <Route path="/" element={<Container>
+                Welcome to Gains Tracker!
+            </Container>}/>
+            <Route path="/transactions" element={<TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>}/>
+            <Route path="/reports" element={<Container>
+                Placeholder report page
+            </Container>}/>
+        </Routes>
     </>
   )
 }
