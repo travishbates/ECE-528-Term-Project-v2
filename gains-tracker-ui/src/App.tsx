@@ -14,6 +14,7 @@ import TransactionUpload from "./TransactionUpload";
 import { getTransactions } from "./backendService";
 import SideNav from "./SideNav";
 import {Routes, Route, useNavigate} from "react-router-dom";
+import Reports from "./Reports";
 
 function App() {
     const [transactions, setTransactions] = React.useState([]);
@@ -56,15 +57,15 @@ function App() {
             </Toolbar>
         </AppBar>
         <SideNav open={ open } closeDrawer={ closeDrawer } handleNavigate={handleNavigate}/>
-        <Routes>
-            <Route path="/" element={<Container>
-                Welcome to Gains Tracker!
-            </Container>}/>
-            <Route path="/transactions" element={<TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>}/>
-            <Route path="/reports" element={<Container>
-                Placeholder report page
-            </Container>}/>
-        </Routes>
+        <Container>
+            <Routes>
+                <Route path="/" element={<p>
+                    Welcome to Gains Tracker!
+                </p>}/>
+                <Route path="/transactions" element={<TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>}/>
+                <Route path="/reports" element={<Reports></Reports>}/>
+            </Routes>
+        </Container>
     </>
   )
 }

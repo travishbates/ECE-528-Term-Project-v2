@@ -18,3 +18,19 @@ export function uploadTransactions(formData) {
         })
         .then(response => response.json());
 }
+
+export function requestReport(startDate, endDate) {
+    console.log({startDate, endDate});
+    return fetch(BASE_URL + "/reports/request",
+        {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                startDate,
+                endDate
+            })
+        })
+        .then(response => response.json());
+}

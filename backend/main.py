@@ -4,6 +4,7 @@ from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from pydantic import BaseModel
 
 import uvicorn
 import csv
@@ -13,6 +14,10 @@ import uuid
 Engine = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 Session = sessionmaker(Engine)
 Base = declarative_base()
+
+class ReportRequest(BaseModel):
+    startDate: str
+    endDate: str
 
 
 class Transaction(Base):
@@ -96,6 +101,11 @@ def delete_transaction(id):
     database.query(Transaction).filter_by(id = id).delete()
     database.commit()
     database.close()
+
+
+@app.post("/reports/request")
+def request_report(request: ReportRequest):
+    return
 
 
 if __name__ == "__main__":
