@@ -1,10 +1,12 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
+import pandas as pd
 
 import uvicorn
 import csv
@@ -105,7 +107,14 @@ def delete_transaction(id):
 
 @app.post("/reports/request")
 def request_report(request: ReportRequest):
-    return
+    data = [
+        {"col1": "val1", "col2": "val2"},
+        {"col1": "val3", "col2": "val4"},
+    ]
+
+    dataFrame = pd.DataFrame(data)
+    csv = dataFrame.to_csv()
+    return StreamingResponse(iter(csv), media_type="text/csv")
 
 
 if __name__ == "__main__":

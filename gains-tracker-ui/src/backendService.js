@@ -32,5 +32,11 @@ export function requestReport(startDate, endDate) {
                 endDate
             })
         })
-        .then(response => response.json());
+        .then(response => response.blob())
+        .then(response => {
+            const anchor = document.createElement("a");
+            anchor.href = window.URL.createObjectURL(response);
+            anchor.download = "report.csv";
+            anchor.click();
+        });
 }
