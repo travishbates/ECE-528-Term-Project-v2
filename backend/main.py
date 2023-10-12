@@ -7,6 +7,7 @@ from sqlalchemy import engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
+from google.cloud import secretmanager
 import pandas as pd
 import os
 
@@ -15,11 +16,20 @@ import csv
 import codecs
 import uuid
 
+databasePassword = os.getenv("DATABASE_PASSWORD")
+
+if databasePassword is None:
+    secretManagerServiceClient = secretmanager.SecretManagerServiceClient()
+    databasePassword = secretManagerServiceClient.access_secret_version(
+        request={"name": "projects/f2023-ece528-group7/secrets/DATABASE_PASSWORD/versions/latest"}
+    ).payload.data.decode("UTF-8")
+
+
 Engine = create_engine(
     engine.url.URL.create(
         drivername="postgresql+psycopg2",
         username="postgres",
-        password=os.environ["DATABASE_PASSWORD"],
+        password=databasePassword,
         query={"host": os.environ["DATABASE_HOST"]},
     ))
 
