@@ -3,17 +3,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
 from sqlalchemy import create_engine, func
+from sqlalchemy import engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 import pandas as pd
+import os
 
 import uvicorn
 import csv
 import codecs
 import uuid
 
-Engine = create_engine("postgresql://postgres:password@localhost:5432/postgres")
+Engine = create_engine(
+    engine.url.URL.create(
+        drivername="postgresql+psycopg2",
+        username="postgres",
+        password=os.environ["DATABASE_PASSWORD"],
+        query={"host": os.environ["DATABASE_HOST"]},
+    ))
+
 Session = sessionmaker(Engine)
 Base = declarative_base()
 
