@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export function getTransactions(page, pageSize) {
     return fetch(BASE_URL + "/transactions?page=" + page + "&pageSize=" + pageSize)

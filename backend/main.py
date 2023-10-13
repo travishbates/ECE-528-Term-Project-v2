@@ -57,6 +57,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins = [
         "http://localhost:5173",
+        "https://gains-tracker-ui-dot-f2023-ece528-group7.ue.r.appspot.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
