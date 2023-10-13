@@ -1,10 +1,14 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
+// @ts-ignore
 import { uploadTransactions } from "./backendService";
 
-function TransactionUpload({ refreshTransactions }) {
+interface TransactionUploadProps {
+    refreshTransactions: () => void
+}
+const TransactionUpload: React.FC<TransactionUploadProps> = ({ refreshTransactions }) => {
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: any) => {
         event.preventDefault();
 
         const formData = new FormData(event.target);

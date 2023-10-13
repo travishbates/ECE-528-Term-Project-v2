@@ -5,7 +5,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 
-function SideNav({ open, closeDrawer, handleNavigate }) {
+interface SideNavProps {
+    open: boolean,
+    closeDrawer: () => void,
+    handleNavigate: (route: string) => void
+}
+const SideNav: React.FC<SideNavProps> = ({ open, closeDrawer, handleNavigate }) => {
     return (
         <>
             <Drawer

@@ -1,17 +1,19 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// @ts-ignore
 import { requestReport } from './backendService';
+import {BaseSyntheticEvent} from "react";
 
 function Reports() {
-    const [startDate, setStartDate] = React.useState();
-    const [endDate, setEndDate] = React.useState();
+    const [startDate, setStartDate] = React.useState<any>();
+    const [endDate, setEndDate] = React.useState<any>();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: BaseSyntheticEvent) => {
         event.preventDefault();
 
         requestReport(startDate.toISOString(), endDate.toISOString())
-            .then((res) => {
+            .then((_res: Promise<any>) => {
                 alert("Report submitted.");
             });
     }

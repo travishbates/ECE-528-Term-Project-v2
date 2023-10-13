@@ -7,17 +7,12 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from "@mui/material/Drawer";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TransactionTable from "./TransactionTable";
-import TransactionUpload from "./TransactionUpload";
-import { getTransactions } from "./backendService";
 import SideNav from "./SideNav";
 import {Routes, Route, useNavigate} from "react-router-dom";
 import Reports from "./Reports";
 
-function App() {
-    const [transactions, setTransactions] = React.useState([]);
+const App: React.FC = () => {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
 
@@ -29,14 +24,7 @@ function App() {
         setOpen(false);
     }
 
-    function refreshTransactions() {
-        getTransactions()
-            .then((result) => {
-                setTransactions(result.result);
-            });
-    }
-
-    const handleNavigate = (route) => {
+    const handleNavigate = (route: string) => {
         navigate(route);
     }
 
@@ -62,7 +50,7 @@ function App() {
                 <Route path="/" element={<p>
                     Welcome to Gains Tracker!
                 </p>}/>
-                <Route path="/transactions" element={<TransactionTable transactions={transactions} refreshTransactions={refreshTransactions}></TransactionTable>}/>
+                <Route path="/transactions" element={<TransactionTable></TransactionTable>}/>
                 <Route path="/reports" element={<Reports></Reports>}/>
             </Routes>
         </Container>

@@ -8,11 +8,12 @@ import TableBody from "@mui/material/TableBody";
 import * as React from "react";
 import { useEffect } from "react";
 import Button from "@mui/material/Button";
+// @ts-ignore
 import { deleteTransaction, getTransactions } from "./backendService";
 import TablePagination from "@mui/material/TablePagination";
 import TransactionUpload from "./TransactionUpload";
 
-function TransactionTable() {
+const TransactionTable: React.FC = () => {
     const [transactions, setTransactions] = React.useState([]);
     const [count, setCount] = React.useState(0);
     const [page, setPage] = React.useState(0);
@@ -22,25 +23,25 @@ function TransactionTable() {
         refreshTransactions();
     }, [page, rowsPerPage]);
 
-    function handleDeleteTransaction(transactionId) {
+    function handleDeleteTransaction(transactionId: any) {
         deleteTransaction(transactionId)
             .then(() => {
                 refreshTransactions();
             });
     }
 
-    const handlePageChange = (event, page) => {
+    const handlePageChange = (_event: any, page: any) => {
         setPage(page);
     }
 
-    const handleRowsPerPageChange = (event) => {
+    const handleRowsPerPageChange = (event: any) => {
         setRowsPerPage(event.target.value);
         setPage(0);
     }
 
     function refreshTransactions() {
         getTransactions(page, rowsPerPage)
-            .then((result) => {
+            .then((result: any) => {
                 setTransactions(result.results);
                 setCount(result.count);
                 setPage(result.page);
@@ -64,7 +65,7 @@ function TransactionTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {transactions.map((transaction) => (
+                        {transactions.map((transaction: any) => (
                             <TableRow key={transaction.id}>
                                 <TableCell>{transaction.time_transacted}</TableCell>
                                 <TableCell>{transaction.asset_purchased_name}</TableCell>
