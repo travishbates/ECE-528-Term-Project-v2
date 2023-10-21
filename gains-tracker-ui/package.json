@@ -16,6 +16,8 @@
     "@mui/material": "^5.14.11",
     "@mui/x-date-pickers": "^6.16.1",
     "dayjs": "^1.11.10",
+    "firebase": "^10.5.0",
+    "firebaseui": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0"
