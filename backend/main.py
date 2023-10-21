@@ -1,4 +1,6 @@
-from fastapi import FastAPI, UploadFile
+import firebase_admin
+from firebase_admin import auth
+from fastapi import FastAPI, UploadFile, Depends, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
@@ -35,6 +37,21 @@ Engine = create_engine(
 
 Session = sessionmaker(Engine)
 Base = declarative_base()
+
+firebase_admin.initialize_app()
+
+
+def get_firebase_user(request: Request):
+    id_token = request.headers.get('Authorization')
+    if not id_token:
+        raise HTTPException(status_code=400, detail='Authorization header must be provided.')
+
+    try:
+        claims = auth.verify_id_token(id_token)
+        return claims
+    except Exception as e:
+        raise HTTPException(status_code=401, detail='Unauthorized')
+
 
 class ReportRequest(BaseModel):
     startDate: str
@@ -84,7 +101,8 @@ def hello_world():
     ]
 
 @app.get("/transactions")
-def get_transactions(page: int = 0, pageSize: int = 10):
+def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
+    print(user['user_id'])
     database = Session()
     database_results = database.query(Transaction).offset(page * pageSize).limit(pageSize).all()
     count = database.query(func.count(Transaction.id)).scalar()
