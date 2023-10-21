@@ -1,31 +1,54 @@
+import {auth} from "./firebase";
+
 const BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
-export function getTransactions(page, pageSize) {
-    return fetch(BASE_URL + "/transactions?page=" + page + "&pageSize=" + pageSize)
+async function getIdToken() {
+    const currentUser = await auth.currentUser;
+
+    if (currentUser) {
+        return currentUser.getIdToken();
+    }
+
+    return null;
+}
+
+export async function getTransactions(page, pageSize) {
+    return fetch(BASE_URL + "/transactions?page=" + page + "&pageSize=" + pageSize, {
+        headers: {
+            Authorization: await getIdToken()
+        }
+    })
         .then(response => response.json());
 }
 
-export function deleteTransaction(transactionId) {
-    return fetch(BASE_URL + "/transaction/" + transactionId)
+export async function deleteTransaction(transactionId) {
+    return fetch(BASE_URL + "/transaction/" + transactionId, {
+        headers: {
+            Authorization: await getIdToken()
+        }
+    })
         .then(response => response.json());
 }
 
-export function uploadTransactions(formData) {
+export async function uploadTransactions(formData) {
     return fetch(BASE_URL + "/transactions",
         {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                Authorization: await getIdToken()
+            }
         })
         .then(response => response.json());
 }
 
-export function requestReport(startDate, endDate) {
-    console.log({startDate, endDate});
+export async function requestReport(startDate, endDate) {
     return fetch(BASE_URL + "/reports/request",
         {
             method: "POST",
             headers: {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                Authorization: await getIdToken()
             },
             body: JSON.stringify({
                 startDate,
