@@ -11,6 +11,7 @@ import TransactionTable from "./TransactionTable";
 import SideNav from "./SideNav";
 import {Routes, Route, useNavigate} from "react-router-dom";
 import Reports from "./Reports";
+import Login from "./Login";
 
 const App: React.FC = () => {
     const [open, setOpen] = React.useState(false);
@@ -41,7 +42,7 @@ const App: React.FC = () => {
 
                 <Typography variant="h5" sx={{ flexGrow: 1 }}>Gains Tracker</Typography>
 
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={() => handleNavigate("./login")}>Login</Button>
             </Toolbar>
         </AppBar>
         <SideNav open={ open } closeDrawer={ closeDrawer } handleNavigate={handleNavigate}/>
@@ -52,6 +53,7 @@ const App: React.FC = () => {
                 </p>}/>
                 <Route path="/transactions" element={<TransactionTable></TransactionTable>}/>
                 <Route path="/reports" element={<Reports></Reports>}/>
+                <Route path="/login" element={<Login></Login>}/>
             </Routes>
         </Container>
     </>
