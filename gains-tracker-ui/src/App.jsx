@@ -12,10 +12,15 @@ import SideNav from "./SideNav";
 import {Routes, Route, useNavigate} from "react-router-dom";
 import Reports from "./Reports";
 import Login from "./Login";
+import ForgotPassword from "./ForgotPassword";
+import Signup from "./Signup";
+import {useAuth} from "./AuthContext";
 
-const App: React.FC = () => {
+const App = () => {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
+
+    const { currentUser, logout } = useAuth()
 
     function openDrawer() {
         setOpen(true);
@@ -25,8 +30,17 @@ const App: React.FC = () => {
         setOpen(false);
     }
 
-    const handleNavigate = (route: string) => {
+    const handleNavigate = (route) => {
         navigate(route);
+    }
+
+    async function handleLogout() {
+        try {
+            await logout()
+            navigate("/login")
+        } catch {
+            console.log("There was an error logging out.");
+        }
     }
 
     return (
@@ -42,7 +56,10 @@ const App: React.FC = () => {
 
                 <Typography variant="h5" sx={{ flexGrow: 1 }}>Gains Tracker</Typography>
 
-                <Button color="inherit" onClick={() => handleNavigate("./login")}>Login</Button>
+                { currentUser ?
+                    <><p>{ currentUser.displayName }</p><Button color="inherit" onClick={() => handleLogout()}>Logout</Button></> :
+                    <Button color="inherit" onClick={() => handleNavigate("./login")}>Login</Button>
+                }
             </Toolbar>
         </AppBar>
         <SideNav open={ open } closeDrawer={ closeDrawer } handleNavigate={handleNavigate}/>
@@ -54,6 +71,8 @@ const App: React.FC = () => {
                 <Route path="/transactions" element={<TransactionTable></TransactionTable>}/>
                 <Route path="/reports" element={<Reports></Reports>}/>
                 <Route path="/login" element={<Login></Login>}/>
+                <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}/>
+                <Route path="/signup" element={<Signup></Signup>}/>
             </Routes>
         </Container>
     </>
