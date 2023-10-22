@@ -62,11 +62,12 @@ class Transaction(Base):
     __tablename__ = "transaction"
 
     id = Column(UUID, primary_key=True, index=True)
+    user_id = Column(VARCHAR)
     time_transacted = Column(TIMESTAMP)
-    asset_purchased_name = Column(VARCHAR)
-    asset_purchased_quantity = Column(NUMERIC)
-    asset_sold_name = Column(VARCHAR)
-    asset_sold_quantity = Column(NUMERIC)
+    transaction_type = Column(VARCHAR)
+    asset_name = Column(VARCHAR)
+    asset_quantity = Column(NUMERIC)
+    total_asset_amount_usd = Column(NUMERIC)
 
 
 app = FastAPI()
@@ -80,25 +81,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-@app.get("/sample-transactions")
-def hello_world():
-    return [
-        {
-            "time": "Time1",
-            "assetBoughtName": "Asset1",
-            "assetBoughtAmount": 123,
-            "assetSoldName": "Asset2",
-            "assetSoldAmount": 456
-        },
-        {
-            "time": "Time2",
-            "assetBoughtName": "Asset2",
-            "assetBoughtAmount": 333,
-            "assetSoldName": "Asset3",
-            "assetSoldAmount": 789
-        }
-    ]
 
 @app.get("/transactions")
 def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
@@ -115,18 +97,19 @@ def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_fireb
     }
 
 @app.post("/transactions")
-async def post_transactions(file: UploadFile):
+async def post_transactions(file: UploadFile, user = Depends(get_firebase_user)):
     reader = csv.DictReader(codecs.iterdecode(file.file, "utf-8"))
     rows = []
 
     for row in reader:
         rows.append(Transaction(
             id=uuid.uuid4(),
+            user_id=user["user_id"],
             time_transacted=row["time_transacted"],
-            asset_purchased_name=row["asset_purchased_name"],
-            asset_purchased_quantity=row["asset_purchased_quantity"],
-            asset_sold_name=row["asset_sold_name"],
-            asset_sold_quantity=row["asset_sold_quantity"]
+            transaction_type=row["transaction_type"],
+            asset_name=row["asset_name"],
+            asset_quantity=row["asset_quantity"],
+            total_asset_amount_usd=row["total_asset_amount_usd"]
         ))
 
     database = Session()
@@ -136,7 +119,7 @@ async def post_transactions(file: UploadFile):
 
 
 @app.get("/transaction/{id}")
-def delete_transaction(id):
+def delete_transaction(id, user = Depends(get_firebase_user)):
     database = Session()
     database.query(Transaction).filter_by(id = id).delete()
     database.commit()
@@ -144,7 +127,7 @@ def delete_transaction(id):
 
 
 @app.post("/reports/request")
-def request_report(request: ReportRequest):
+def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
     data = [
         {"col1": "val1", "col2": "val2"},
         {"col1": "val3", "col2": "val4"},

@@ -57,10 +57,10 @@ const TransactionTable: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Time</TableCell>
-                            <TableCell>Asset Bought</TableCell>
-                            <TableCell>Asset Bought Amount</TableCell>
-                            <TableCell>Asset Sold</TableCell>
-                            <TableCell>Asset Sold Amount</TableCell>
+                            <TableCell>Transaction Type</TableCell>
+                            <TableCell>Asset Name</TableCell>
+                            <TableCell>Asset Quantity</TableCell>
+                            <TableCell>Total Asset Amount (USD)</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -68,10 +68,10 @@ const TransactionTable: React.FC = () => {
                         {transactions.map((transaction: any) => (
                             <TableRow key={transaction.id}>
                                 <TableCell>{transaction.time_transacted}</TableCell>
-                                <TableCell>{transaction.asset_purchased_name}</TableCell>
-                                <TableCell>{transaction.asset_purchased_quantity}</TableCell>
-                                <TableCell>{transaction.asset_sold_name}</TableCell>
-                                <TableCell>{transaction.asset_sold_quantity}</TableCell>
+                                <TableCell>{transaction.transaction_type}</TableCell>
+                                <TableCell>{transaction.asset_name}</TableCell>
+                                <TableCell>{transaction.asset_quantity}</TableCell>
+                                <TableCell>{transaction.total_asset_amount_usd}</TableCell>
                                 <TableCell>
                                     <Button color="inherit" onClick={() => handleDeleteTransaction(transaction.id)}>Delete</Button>
                                 </TableCell>
