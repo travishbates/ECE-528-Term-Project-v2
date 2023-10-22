@@ -128,13 +128,22 @@ def delete_transaction(id, user = Depends(get_firebase_user)):
 
 @app.post("/reports/request")
 def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
-    data = [
-        {"col1": "val1", "col2": "val2"},
-        {"col1": "val3", "col2": "val4"},
-    ]
+    database = Session()
+    database_results = database.query(
+        Transaction.time_transacted,
+        Transaction.transaction_type,
+        Transaction.asset_name,
+        Transaction.asset_quantity,
+        Transaction.total_asset_amount_usd
+    ).filter(
+        Transaction.user_id == user["user_id"],
+        Transaction.time_transacted >= request.startDate,
+        Transaction.time_transacted <= request.endDate
+    ).all()
+    database.close()
 
-    dataFrame = pd.DataFrame(data)
-    csv = dataFrame.to_csv()
+    dataFrame = pd.DataFrame(database_results)
+    csv = dataFrame.to_csv(header=['Transaction Time', 'Transaction Type', 'Asset Name', 'Asset Quantity', 'Total Asset Amount (USD)'], index=False)
     return StreamingResponse(iter(csv), media_type="text/csv")
 
 
