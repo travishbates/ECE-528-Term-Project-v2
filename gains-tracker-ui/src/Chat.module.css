@@ -1,0 +1,8 @@
+.Card {
+    width: 600px;
+}
+
+.FlexContainer {
+    display: flex;
+    flex-direction: column;
+}

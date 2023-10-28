@@ -28,6 +28,7 @@ const SideNav: React.FC<SideNavProps> = ({ open, closeDrawer, handleNavigate }) 
                     <ListItemButton onClick={() => handleNavigate("./")}>Home</ListItemButton>
                     <ListItemButton onClick={() => handleNavigate("./transactions")}>Transactions</ListItemButton>
                     <ListItemButton onClick={() => handleNavigate("./reports")}>Reports</ListItemButton>
+                    <ListItemButton onClick={() => handleNavigate("./chat")}>Chat</ListItemButton>
                 </List>
             </Drawer>
         </>

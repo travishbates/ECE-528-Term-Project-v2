@@ -63,3 +63,23 @@ export async function requestReport(startDate, endDate) {
             anchor.click();
         });
 }
+
+export async function chatWithBot(message) {
+    return "This is a mock bot message. I will reply to '" + message + "' when I am implemented.";
+
+    // return fetch(BASE_URL + "/chat",
+    //     {
+    //         method: "POST",
+    //         headers: {
+    //             "content-type": "application/json",
+    //             Authorization: await getIdToken()
+    //         },
+    //         body: JSON.stringify({
+    //             startDate,
+    //             endDate
+    //         })
+    //     })
+    //     .then(response => {
+    //         // Fill in message handling code.
+    //     });
+}

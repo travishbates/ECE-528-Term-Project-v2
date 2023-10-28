@@ -12,6 +12,7 @@ import SideNav from "./SideNav";
 import {Routes, Route, useNavigate} from "react-router-dom";
 import Reports from "./Reports";
 import Login from "./Login";
+import Chat from "./Chat";
 import ForgotPassword from "./ForgotPassword";
 import Signup from "./Signup";
 import {useAuth} from "./AuthContext";
@@ -73,6 +74,7 @@ const App = () => {
                 <Route path="/login" element={<Login></Login>}/>
                 <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}/>
                 <Route path="/signup" element={<Signup></Signup>}/>
+                <Route path="/chat" element={<Chat></Chat>}/>
             </Routes>
         </Container>
     </>
