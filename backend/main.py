@@ -129,21 +129,54 @@ def delete_transaction(id, user = Depends(get_firebase_user)):
 @app.post("/reports/request")
 def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
     database = Session()
-    database_results = database.query(
-        Transaction.time_transacted,
-        Transaction.transaction_type,
-        Transaction.asset_name,
-        Transaction.asset_quantity,
-        Transaction.total_asset_amount_usd
-    ).filter(
+    database_results = database.query(Transaction).filter(
         Transaction.user_id == user["user_id"],
         Transaction.time_transacted >= request.startDate,
         Transaction.time_transacted <= request.endDate
     ).all()
     database.close()
 
-    dataFrame = pd.DataFrame(database_results)
-    csv = dataFrame.to_csv(header=['Transaction Time', 'Transaction Type', 'Asset Name', 'Asset Quantity', 'Total Asset Amount (USD)'], index=False)
+    inventory = {}
+    output = pd.DataFrame(columns=['description', 'date_acquired', 'date_sold', 'proceeds', 'cost_basis', 'gain'])
+
+    dataFrame = pd.DataFrame([row.__dict__ for row in database_results])
+
+    for index, row in dataFrame.iterrows():
+        if row['transaction_type'] == 'buy':
+            if row['asset_name'] not in inventory:
+                inventory[row['asset_name']] = []
+            inventory[row['asset_name']].append(row)
+        elif row['transaction_type'] == 'sell':
+            asset_amount_need_to_record = row["asset_quantity"]
+            while asset_amount_need_to_record > 0:
+                purchase = inventory[row["asset_name"]][0]
+                purchase_cost_per_amount = purchase["total_asset_amount_usd"] / purchase["asset_quantity"]
+                amount_to_record = min(asset_amount_need_to_record, purchase["asset_quantity"])
+                date_acquired = purchase["time_transacted"]
+
+                if amount_to_record == purchase["asset_quantity"]:
+                    cost_basis = purchase["total_asset_amount_usd"]
+                    inventory[row["asset_name"]].pop(0)
+                else:
+                    cost_basis = purchase_cost_per_amount * amount_to_record
+                    inventory[row["asset_name"]][0]["asset_quantity"] -= amount_to_record
+                    inventory[row["asset_name"]][0]["total_asset_amount_usd"] -= amount_to_record * purchase_cost_per_amount
+
+                proceeds = row["total_asset_amount_usd"] / row["asset_quantity"] * amount_to_record
+                gain = proceeds - cost_basis
+
+                asset_amount_need_to_record -= amount_to_record
+
+                output = output.append({
+                    'description': str(amount_to_record) + " " + row["asset_name"],
+                    'date_acquired': date_acquired,
+                    'date_sold': row['time_transacted'],
+                    'proceeds': proceeds,
+                    'cost_basis': cost_basis,
+                    'gain': gain,
+                }, ignore_index=True)
+
+    csv = output.to_csv(index=False)
     return StreamingResponse(iter(csv), media_type="text/csv")
 
 
