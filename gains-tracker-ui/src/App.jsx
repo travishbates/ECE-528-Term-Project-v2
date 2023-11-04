@@ -74,7 +74,7 @@ const App = () => {
                 <Route path="/login" element={<Login></Login>}/>
                 <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}/>
                 <Route path="/signup" element={<Signup></Signup>}/>
-                <Route path="/chat" element={<Chat></Chat>}/>
+                {/*<Route path="/chat" element={<Chat></Chat>}/>*/}
             </Routes>
         </Container>
     </>

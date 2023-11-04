@@ -9,5 +9,22 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    <df-messenger
+            project-id="f2023-ece528-group7"
+            agent-id="0d74c6da-d046-41c1-aafb-fe6182bf04ec"
+            language-code="en">
+      <df-messenger-chat-bubble
+              chat-title="Gains Tracker Assistant">
+      </df-messenger-chat-bubble>
+    </df-messenger>
+    <style>
+      df-messenger {
+        z-index: 999;
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+      }
+    </style>
   </body>
 </html>
