@@ -67,7 +67,7 @@ const App = () => {
         <Container>
             <Routes>
                 <Route path="/" element={<p>
-                    Welcome to Gains Tracker!
+                    Welcome to Gains Tracker! At Gains Tracker, you can upload your transactions and get reports that can help you with filing taxes.
                 </p>}/>
                 <Route path="/transactions" element={<TransactionTable></TransactionTable>}/>
                 <Route path="/reports" element={<Reports></Reports>}/>

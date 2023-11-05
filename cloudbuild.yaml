@@ -19,7 +19,7 @@ steps:
       - |
         gcloud config set app/cloud_build_timeout 1600 \
         && cd gains-tracker-ui \
-        && gcloud app deploy -v 1
+        && gcloud app deploy -v 1 \
         && cd ../backend \
         && gcloud app deploy -v 1
 timeout: '1600s'
