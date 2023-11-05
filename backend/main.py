@@ -1,9 +1,9 @@
 import firebase_admin
 from firebase_admin import auth
-from fastapi import FastAPI, UploadFile, Depends, Request, HTTPException
+from fastapi import FastAPI, UploadFile, Depends, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC
+from sqlalchemy import Column, UUID, TIMESTAMP, VARCHAR, NUMERIC, TEXT, desc
 from sqlalchemy import create_engine, func
 from sqlalchemy import engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 from google.cloud import secretmanager
 from datetime import datetime
+from google.cloud import storage
 import pandas as pd
 import os
 
@@ -18,6 +19,9 @@ import uvicorn
 import csv
 import codecs
 import uuid
+
+storage_client = storage.Client()
+storage_bucket = storage_client.get_bucket("reports-528")
 
 databasePassword = os.getenv("DATABASE_PASSWORD")
 
@@ -71,6 +75,18 @@ class Transaction(Base):
     total_asset_amount_usd = Column(NUMERIC)
 
 
+class Report(Base):
+    __tablename__ = "report"
+
+    id = Column(UUID, primary_key=True, index=True)
+    user_id = Column(VARCHAR)
+    status = Column(VARCHAR)
+    requested_date = Column(TIMESTAMP)
+    start_date = Column(TIMESTAMP)
+    end_date = Column(TIMESTAMP)
+    download_url = Column(TEXT)
+
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -85,7 +101,6 @@ app.add_middleware(
 
 @app.get("/transactions")
 def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
-    print(user['user_id'])
     database = Session()
     database_results = database.query(Transaction).offset(page * pageSize).limit(pageSize).all()
     count = database.query(func.count(Transaction.id)).scalar()
@@ -96,6 +111,35 @@ def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_fireb
         "pageSize": pageSize,
         "results": database_results
     }
+
+
+@app.get("/reports")
+def get_reports(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
+    database = Session()
+    database_results = database.query(Report).order_by(desc(Report.requested_date)).offset(page * pageSize).limit(pageSize).all()
+    count = database.query(func.count(Report.id)).scalar()
+    database.close()
+    return {
+        "count": count,
+        "page": page,
+        "pageSize": pageSize,
+        "results": database_results
+    }
+
+@app.get("/report/{id}")
+def get_report(id, user = Depends(get_firebase_user)):
+    database = Session()
+    database_result = database.query(Report).filter_by(id=id, user_id=user["user_id"]).first()
+    database.close()
+
+    if database_result is None:
+        return {
+            'message': "Not found."
+        }
+
+    blob = storage_bucket.blob(str(database_result.id))
+    return StreamingResponse(iter(blob.download_as_text()), media_type="text/csv")
+
 
 @app.post("/transactions")
 async def post_transactions(file: UploadFile, user = Depends(get_firebase_user)):
@@ -127,14 +171,13 @@ def delete_transaction(id, user = Depends(get_firebase_user)):
     database.close()
 
 
-@app.post("/reports/request")
-def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
+def process_report(request: ReportRequest, user, file_name):
     database = Session()
+
     database_results = database.query(Transaction).filter(
         Transaction.user_id == user["user_id"],
         Transaction.time_transacted <= request.endDate
     ).all()
-    database.close()
 
     inventory = {}
     output = pd.DataFrame(columns=['description', 'date_acquired', 'date_sold', 'proceeds', 'cost_basis', 'gain'])
@@ -177,8 +220,35 @@ def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
                         'gain': gain,
                     }, ignore_index=True)
 
-    csv = output.to_csv(index=False)
-    return StreamingResponse(iter(csv), media_type="text/csv")
+    blob = storage_bucket.blob(str(file_name))
+    blob.upload_from_string(output.to_csv(index=False))
+
+    database.query(Report).filter_by(id=file_name).update({
+        'status': 'complete',
+        'download_url': blob.path
+    })
+    database.commit()
+    database.close()
+
+
+@app.post("/reports/request")
+def request_report(request: ReportRequest, background_tasks: BackgroundTasks, user = Depends(get_firebase_user)):
+    file_name = uuid.uuid4()
+    database = Session()
+    database.add(Report(
+        id = file_name,
+        user_id = user["user_id"],
+        status = "in-progress",
+        requested_date = datetime.now(),
+        start_date = request.startDate,
+        end_date = request.endDate
+    ))
+    database.commit()
+    database.close()
+    background_tasks.add_task(process_report, request, user, file_name)
+    return {
+        "message": "Report request submitted."
+    }
 
 
 if __name__ == "__main__":

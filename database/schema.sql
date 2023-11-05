@@ -23,3 +23,28 @@ CREATE TABLE IF NOT EXISTS transaction
 
     primary key (id)
 );
+
+CREATE TABLE IF NOT EXISTS report_status
+(
+    status varchar(255) unique,
+
+    primary key (status)
+);
+
+INSERT INTO report_status values
+('in-progress'),
+('failed'),
+('complete');
+
+CREATE TABLE IF NOT EXISTS report
+(
+    id uuid,
+    user_id varchar(255) not null,
+    status varchar(255) not null references report_status (status),
+    requested_date timestamp not null,
+    start_date timestamp not null,
+    end_date timestamp not null,
+    download_url text,
+
+    primary key (id)
+);

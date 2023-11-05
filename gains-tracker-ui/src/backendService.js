@@ -21,6 +21,30 @@ export async function getTransactions(page, pageSize) {
         .then(response => response.json());
 }
 
+export async function getReports(page, pageSize) {
+    return fetch(BASE_URL + "/reports?page=" + page + "&pageSize=" + pageSize, {
+        headers: {
+            Authorization: await getIdToken()
+        }
+    })
+        .then(response => response.json());
+}
+
+export async function getReport(id) {
+    return fetch(BASE_URL + "/report/" + id, {
+        headers: {
+            Authorization: await getIdToken()
+        }
+    })
+        .then(response => response.blob())
+        .then(response => {
+            const anchor = document.createElement("a");
+            anchor.href = window.URL.createObjectURL(response);
+            anchor.download = "report.csv";
+            anchor.click();
+        });
+}
+
 export async function deleteTransaction(transactionId) {
     return fetch(BASE_URL + "/transaction/" + transactionId, {
         headers: {
@@ -55,13 +79,6 @@ export async function requestReport(startDate, endDate) {
                 endDate
             })
         })
-        .then(response => response.blob())
-        .then(response => {
-            const anchor = document.createElement("a");
-            anchor.href = window.URL.createObjectURL(response);
-            anchor.download = "report.csv";
-            anchor.click();
-        });
 }
 
 export async function chatWithBot(message) {
