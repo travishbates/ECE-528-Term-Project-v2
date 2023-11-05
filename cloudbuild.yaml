@@ -8,6 +8,7 @@ steps:
         && cd backend \
         && gcloud app deploy -v 1 \
         && cd ../gains-tracker-ui \
+        && npm run build
         && gcloud app deploy -v 1
 timeout: '1600s'
 options:
