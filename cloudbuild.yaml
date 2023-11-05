@@ -5,7 +5,9 @@ steps:
     args:
       - '-c'
       - |
-        cd ../gains-tracker-ui \
+        pwd \
+        && ls \
+        && cd ../gains-tracker-ui \
         && npm run build
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
