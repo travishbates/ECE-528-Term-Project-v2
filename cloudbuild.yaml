@@ -1,4 +1,11 @@
 steps:
+  - name: 'node'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd ../gains-tracker-ui \
+        && npm run build
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
@@ -8,7 +15,6 @@ steps:
         && cd backend \
         && gcloud app deploy -v 1 \
         && cd ../gains-tracker-ui \
-        && npm run build
         && gcloud app deploy -v 1
 timeout: '1600s'
 options:
