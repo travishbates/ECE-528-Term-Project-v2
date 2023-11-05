@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 from google.cloud import secretmanager
+from datetime import datetime
 import pandas as pd
 import os
 
@@ -131,7 +132,6 @@ def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
     database = Session()
     database_results = database.query(Transaction).filter(
         Transaction.user_id == user["user_id"],
-        Transaction.time_transacted >= request.startDate,
         Transaction.time_transacted <= request.endDate
     ).all()
     database.close()
@@ -167,14 +167,15 @@ def request_report(request: ReportRequest, user = Depends(get_firebase_user)):
 
                 asset_amount_need_to_record -= amount_to_record
 
-                output = output.append({
-                    'description': str(amount_to_record) + " " + row["asset_name"],
-                    'date_acquired': date_acquired,
-                    'date_sold': row['time_transacted'],
-                    'proceeds': proceeds,
-                    'cost_basis': cost_basis,
-                    'gain': gain,
-                }, ignore_index=True)
+                if row['time_transacted'] > datetime.strptime(request.startDate, "%Y-%m-%dT%H:%M:%S.%fZ"):
+                    output = output.append({
+                        'description': str(amount_to_record) + " " + row["asset_name"],
+                        'date_acquired': date_acquired,
+                        'date_sold': row['time_transacted'],
+                        'proceeds': proceeds,
+                        'cost_basis': cost_basis,
+                        'gain': gain,
+                    }, ignore_index=True)
 
     csv = output.to_csv(index=False)
     return StreamingResponse(iter(csv), media_type="text/csv")
