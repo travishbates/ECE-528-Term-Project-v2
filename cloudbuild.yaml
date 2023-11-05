@@ -8,6 +8,7 @@ steps:
         pwd \
         && ls \
         && cd gains-tracker-ui \
+        && npm install \
         && npm run build
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
