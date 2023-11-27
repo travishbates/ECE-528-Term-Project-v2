@@ -1,4 +1,4 @@
-resource "google_project" "f2023_ece528_group7" {
+resource "google_project" "f2023_ece528_bates_travis" {
   auto_create_network = true
   billing_account     = "0152E9-E9E80C-CD3AE3"
   folder_id           = "635890743054"
@@ -6,13 +6,13 @@ resource "google_project" "f2023_ece528_group7" {
     firebase = "enabled"
   }
   name       = "ECE 528 Gains Tracker"
-  project_id = "f2023-ece528-group7"
+  project_id = "f2023-ece528-bates-travis"
 }
-# terraform import google_project.f2023_ece528_group7 projects/f2023-ece528-group7
+# terraform import google_project.f2023_ece528_bates_travis projects/f2023-ece528-bates-travis
 resource "google_sql_database_instance" "database" {
   database_version = "POSTGRES_15"
   name             = "database"
-  project          = "f2023-ece528-group7"
+  project          = "f2023-ece528-bates-travis"
   region           = "us-east1"
   settings {
     activation_policy = "ALWAYS"
@@ -48,7 +48,7 @@ resource "google_sql_database_instance" "database" {
     tier         = "db-f1-micro"
   }
 }
-# terraform import google_sql_database_instance.database projects/f2023-ece528-group7/instances/database
+# terraform import google_sql_database_instance.database projects/f2023-ece528-bates-travis/instances/database
 resource "google_compute_firewall" "default_allow_icmp" {
   allow {
     protocol = "icmp"
@@ -56,12 +56,12 @@ resource "google_compute_firewall" "default_allow_icmp" {
   description   = "Allow ICMP from anywhere"
   direction     = "INGRESS"
   name          = "default-allow-icmp"
-  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-group7/global/networks/default"
+  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-bates-travis/global/networks/default"
   priority      = 65534
-  project       = "f2023-ece528-group7"
+  project       = "f2023-ece528-bates-travis"
   source_ranges = ["0.0.0.0/0"]
 }
-# terraform import google_compute_firewall.default_allow_icmp projects/f2023-ece528-group7/global/firewalls/default-allow-icmp
+# terraform import google_compute_firewall.default_allow_icmp projects/f2023-ece528-bates-travis/global/firewalls/default-allow-icmp
 resource "google_compute_firewall" "default_allow_internal" {
   allow {
     ports    = ["0-65535"]
@@ -77,12 +77,12 @@ resource "google_compute_firewall" "default_allow_internal" {
   description   = "Allow internal traffic on the default network"
   direction     = "INGRESS"
   name          = "default-allow-internal"
-  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-group7/global/networks/default"
+  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-bates-travis/global/networks/default"
   priority      = 65534
-  project       = "f2023-ece528-group7"
+  project       = "f2023-ece528-bates-travis"
   source_ranges = ["10.128.0.0/9"]
 }
-# terraform import google_compute_firewall.default_allow_internal projects/f2023-ece528-group7/global/firewalls/default-allow-internal
+# terraform import google_compute_firewall.default_allow_internal projects/f2023-ece528-bates-travis/global/firewalls/default-allow-internal
 resource "google_compute_firewall" "default_allow_rdp" {
   allow {
     ports    = ["3389"]
@@ -91,12 +91,12 @@ resource "google_compute_firewall" "default_allow_rdp" {
   description   = "Allow RDP from anywhere"
   direction     = "INGRESS"
   name          = "default-allow-rdp"
-  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-group7/global/networks/default"
+  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-bates-travis/global/networks/default"
   priority      = 65534
-  project       = "f2023-ece528-group7"
+  project       = "f2023-ece528-bates-travis"
   source_ranges = ["0.0.0.0/0"]
 }
-# terraform import google_compute_firewall.default_allow_rdp projects/f2023-ece528-group7/global/firewalls/default-allow-rdp
+# terraform import google_compute_firewall.default_allow_rdp projects/f2023-ece528-bates-travis/global/firewalls/default-allow-rdp
 resource "google_compute_firewall" "default_allow_ssh" {
   allow {
     ports    = ["22"]
@@ -105,33 +105,33 @@ resource "google_compute_firewall" "default_allow_ssh" {
   description   = "Allow SSH from anywhere"
   direction     = "INGRESS"
   name          = "default-allow-ssh"
-  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-group7/global/networks/default"
+  network       = "https://www.googleapis.com/compute/v1/projects/f2023-ece528-bates-travis/global/networks/default"
   priority      = 65534
-  project       = "f2023-ece528-group7"
+  project       = "f2023-ece528-bates-travis"
   source_ranges = ["0.0.0.0/0"]
 }
-# terraform import google_compute_firewall.default_allow_ssh projects/f2023-ece528-group7/global/firewalls/default-allow-ssh
+# terraform import google_compute_firewall.default_allow_ssh projects/f2023-ece528-bates-travis/global/firewalls/default-allow-ssh
 resource "google_service_account" "firebase_adminsdk_rhaxt" {
   account_id   = "firebase-adminsdk-rhaxt"
   description  = "Firebase Admin SDK Service Agent"
   display_name = "firebase-adminsdk"
-  project      = "f2023-ece528-group7"
+  project      = "f2023-ece528-bates-travis"
 }
-# terraform import google_service_account.firebase_adminsdk_rhaxt projects/f2023-ece528-group7/serviceAccounts/firebase-adminsdk-rhaxt@f2023-ece528-group7.iam.gserviceaccount.com
+# terraform import google_service_account.firebase_adminsdk_rhaxt projects/f2023-ece528-bates-travis/serviceAccounts/firebase-adminsdk-rhaxt@f2023-ece528-bates-travis.iam.gserviceaccount.com
 resource "google_service_account" "690748867508_compute" {
   account_id   = "690748867508-compute"
   display_name = "Compute Engine default service account"
-  project      = "f2023-ece528-group7"
+  project      = "f2023-ece528-bates-travis"
 }
-# terraform import google_service_account.690748867508_compute projects/f2023-ece528-group7/serviceAccounts/690748867508-compute@f2023-ece528-group7.iam.gserviceaccount.com
-resource "google_service_account" "f2023_ece528_group7" {
-  account_id   = "f2023-ece528-group7"
+# terraform import google_service_account.690748867508_compute projects/f2023-ece528-bates-travis/serviceAccounts/690748867508-compute@f2023-ece528-bates-travis.iam.gserviceaccount.com
+resource "google_service_account" "f2023_ece528_bates_travis" {
+  account_id   = "f2023-ece528-bates-travis"
   display_name = "App Engine default service account"
-  project      = "f2023-ece528-group7"
+  project      = "f2023-ece528-bates-travis"
 }
-# terraform import google_service_account.f2023_ece528_group7 projects/f2023-ece528-group7/serviceAccounts/f2023-ece528-group7@f2023-ece528-group7.iam.gserviceaccount.com
+# terraform import google_service_account.f2023_ece528_bates_travis projects/f2023-ece528-bates-travis/serviceAccounts/f2023-ece528-bates-travis@f2023-ece528-bates-travis.iam.gserviceaccount.com
 resource "google_logging_log_sink" "a_default" {
-  destination            = "logging.googleapis.com/projects/f2023-ece528-group7/locations/global/buckets/_Default"
+  destination            = "logging.googleapis.com/projects/f2023-ece528-bates-travis/locations/global/buckets/_Default"
   filter                 = "NOT LOG_ID(\"cloudaudit.googleapis.com/activity\") AND NOT LOG_ID(\"externalaudit.googleapis.com/activity\") AND NOT LOG_ID(\"cloudaudit.googleapis.com/system_event\") AND NOT LOG_ID(\"externalaudit.googleapis.com/system_event\") AND NOT LOG_ID(\"cloudaudit.googleapis.com/access_transparency\") AND NOT LOG_ID(\"externalaudit.googleapis.com/access_transparency\")"
   name                   = "_Default"
   project                = "690748867508"
@@ -139,7 +139,7 @@ resource "google_logging_log_sink" "a_default" {
 }
 # terraform import google_logging_log_sink.a_default 690748867508###_Default
 resource "google_logging_log_sink" "a_required" {
-  destination            = "logging.googleapis.com/projects/f2023-ece528-group7/locations/global/buckets/_Required"
+  destination            = "logging.googleapis.com/projects/f2023-ece528-bates-travis/locations/global/buckets/_Required"
   filter                 = "LOG_ID(\"cloudaudit.googleapis.com/activity\") OR LOG_ID(\"externalaudit.googleapis.com/activity\") OR LOG_ID(\"cloudaudit.googleapis.com/system_event\") OR LOG_ID(\"externalaudit.googleapis.com/system_event\") OR LOG_ID(\"cloudaudit.googleapis.com/access_transparency\") OR LOG_ID(\"externalaudit.googleapis.com/access_transparency\")"
   name                   = "_Required"
   project                = "690748867508"
@@ -359,7 +359,7 @@ resource "google_storage_bucket" "chatbot_artifacts" {
   force_destroy               = false
   location                    = "US"
   name                        = "chatbot-artifacts"
-  project                     = "f2023-ece528-group7"
+  project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
@@ -381,7 +381,7 @@ resource "google_storage_bucket" "690748867508_us_import_custom" {
   }
   location                 = "US"
   name                     = "690748867508_us_import_custom"
-  project                  = "f2023-ece528-group7"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
@@ -407,7 +407,7 @@ resource "google_storage_bucket" "690748867508_us_import_content" {
   }
   location                 = "US"
   name                     = "690748867508_us_import_content"
-  project                  = "f2023-ece528-group7"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
@@ -421,7 +421,7 @@ resource "google_storage_bucket" "reports_528" {
   force_destroy               = false
   location                    = "US"
   name                        = "reports-528"
-  project                     = "f2023-ece528-group7"
+  project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
@@ -440,7 +440,7 @@ resource "google_storage_bucket" "cloud_ai_platform_ff4bb3b4_9b2d_4c7a_9baa_7859
   }
   location                 = "US-CENTRAL1"
   name                     = "cloud-ai-platform-ff4bb3b4-9b2d-4c7a-9baa-7859494cff66"
-  project                  = "f2023-ece528-group7"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "REGIONAL"
 }
@@ -450,20 +450,20 @@ resource "google_project_service" "storage_api_googleapis_com" {
   service = "storage-api.googleapis.com"
 }
 # terraform import google_project_service.storage_api_googleapis_com 690748867508/storage-api.googleapis.com
-resource "google_storage_bucket" "f2023_ece528_group7_appspot_com" {
+resource "google_storage_bucket" "f2023_ece528_bates_travis_appspot_com" {
   force_destroy            = false
   location                 = "US-EAST1"
-  name                     = "f2023-ece528-group7.appspot.com"
-  project                  = "f2023-ece528-group7"
+  name                     = "f2023-ece528-bates-travis.appspot.com"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
-# terraform import google_storage_bucket.f2023_ece528_group7_appspot_com f2023-ece528-group7.appspot.com
+# terraform import google_storage_bucket.f2023_ece528_bates_travis_appspot_com f2023-ece528-bates-travis.appspot.com
 resource "google_storage_bucket" "sc_dataset" {
   force_destroy               = false
   location                    = "US"
   name                        = "sc-dataset"
-  project                     = "f2023-ece528-group7"
+  project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
@@ -483,7 +483,7 @@ resource "google_storage_bucket" "vertexai_textclassification" {
   force_destroy               = false
   location                    = "US-CENTRAL1"
   name                        = "vertexai-textclassification"
-  project                     = "f2023-ece528-group7"
+  project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = true
@@ -510,26 +510,26 @@ resource "google_storage_bucket" "690748867508_us_import_csv" {
   }
   location                 = "US"
   name                     = "690748867508_us_import_csv"
-  project                  = "f2023-ece528-group7"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
 # terraform import google_storage_bucket.690748867508_us_import_csv 690748867508_us_import_csv
-resource "google_storage_bucket" "us_artifacts_f2023_ece528_group7_appspot_com" {
+resource "google_storage_bucket" "us_artifacts_f2023_ece528_bates_travis_appspot_com" {
   force_destroy            = false
   location                 = "US"
-  name                     = "us.artifacts.f2023-ece528-group7.appspot.com"
-  project                  = "f2023-ece528-group7"
+  name                     = "us.artifacts.f2023-ece528-bates-travis.appspot.com"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
-# terraform import google_storage_bucket.us_artifacts_f2023_ece528_group7_appspot_com us.artifacts.f2023-ece528-group7.appspot.com
+# terraform import google_storage_bucket.us_artifacts_f2023_ece528_bates_travis_appspot_com us.artifacts.f2023-ece528-bates-travis.appspot.com
 resource "google_project_service" "secretmanager_googleapis_com" {
   project = "690748867508"
   service = "secretmanager.googleapis.com"
 }
 # terraform import google_project_service.secretmanager_googleapis_com 690748867508/secretmanager.googleapis.com
-resource "google_storage_bucket" "staging_f2023_ece528_group7_appspot_com" {
+resource "google_storage_bucket" "staging_f2023_ece528_bates_travis_appspot_com" {
   force_destroy = false
   lifecycle_rule {
     action {
@@ -541,12 +541,12 @@ resource "google_storage_bucket" "staging_f2023_ece528_group7_appspot_com" {
     }
   }
   location                 = "US-EAST1"
-  name                     = "staging.f2023-ece528-group7.appspot.com"
-  project                  = "f2023-ece528-group7"
+  name                     = "staging.f2023-ece528-bates-travis.appspot.com"
+  project                  = "f2023-ece528-bates-travis"
   public_access_prevention = "inherited"
   storage_class            = "STANDARD"
 }
-# terraform import google_storage_bucket.staging_f2023_ece528_group7_appspot_com staging.f2023-ece528-group7.appspot.com
+# terraform import google_storage_bucket.staging_f2023_ece528_bates_travis_appspot_com staging.f2023-ece528-bates-travis.appspot.com
 resource "google_project_service" "storage_component_googleapis_com" {
   project = "690748867508"
   service = "storage-component.googleapis.com"
