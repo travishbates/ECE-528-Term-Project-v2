@@ -9,6 +9,13 @@ resource "google_project" "f2023_ece528_bates_travis" {
   project_id = "f2023-ece528-bates-travis"
 }
 
+terraform {
+  backend "gcs" {
+    bucket = "f2023-ece528-bates-travis-tfstate"
+    prefix = "env/dev"
+  }
+}
+
 resource "google_sql_database_instance" "database" {
   database_version = "POSTGRES_15"
   name             = "database"
