@@ -58,7 +58,7 @@ const App = () => {
                 <Typography variant="h5" sx={{ flexGrow: 1 }}>Gains Tracker</Typography>
 
                 { currentUser ?
-                    <><p>{ currentUser.displayName }</p><Button color="inherit" onClick={() => handleLogout()}>Logout</Button></> :
+                    <><p>{ currentUser.email }</p><Button color="inherit" onClick={() => handleLogout()}>Logout</Button></> :
                     <Button color="inherit" onClick={() => handleNavigate("./login")}>Login</Button>
                 }
             </Toolbar>
