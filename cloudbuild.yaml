@@ -18,10 +18,10 @@ steps:
       - '-c'
       - |
         gcloud config set app/cloud_build_timeout 1600 \
-        && cd gains-tracker-ui \
+        && cd backend \
         && gcloud app deploy -v $(git rev-parse HEAD) \
-        && cd ../backend \
-        && gcloud app deploy -v $(git rev-parse HEAD)
+        && cd ../gains-tracker-ui \
+        && gcloud app deploy -v $(git rev-parse HEAD) \
 timeout: '1600s'
 options:
   logging: CLOUD_LOGGING_ONLY
