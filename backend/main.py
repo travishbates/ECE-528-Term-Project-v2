@@ -21,7 +21,7 @@ import codecs
 import uuid
 
 storage_client = storage.Client()
-storage_bucket = storage_client.get_bucket("user-reports")
+storage_bucket = storage_client.get_bucket("f2023-ece528-bates-travis-user-reports")
 
 databasePassword = os.getenv("DATABASE_PASSWORD")
 

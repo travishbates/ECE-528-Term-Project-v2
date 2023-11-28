@@ -31,9 +31,6 @@ resource "google_sql_database_instance" "database" {
     disk_autoresize_limit = 0
     disk_size             = 10
     disk_type             = "PD_SSD"
-    insights_config {
-      query_string_length = 0
-    }
     ip_configuration {
       authorized_networks {
         name  = "68.179.140.8"
@@ -52,7 +49,7 @@ resource "google_sql_database_instance" "database" {
 resource "google_storage_bucket" "chatbot_artifacts" {
   force_destroy               = false
   location                    = "US"
-  name                        = "chatbot-artifacts"
+  name                        = "f2023-ece528-bates-travis-chatbot-artifacts"
   project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
@@ -62,7 +59,7 @@ resource "google_storage_bucket" "chatbot_artifacts" {
 resource "google_storage_bucket" "user_reports" {
   force_destroy               = false
   location                    = "US"
-  name                        = "user-reports"
+  name                        = "f2023-ece528-bates-travis-user-reports"
   project                     = "f2023-ece528-bates-travis"
   public_access_prevention    = "enforced"
   storage_class               = "STANDARD"
