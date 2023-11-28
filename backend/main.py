@@ -28,7 +28,7 @@ databasePassword = os.getenv("DATABASE_PASSWORD")
 if databasePassword is None:
     secretManagerServiceClient = secretmanager.SecretManagerServiceClient()
     databasePassword = secretManagerServiceClient.access_secret_version(
-        request={"name": "projects/f2023-ece528-group7/secrets/DATABASE_PASSWORD/versions/latest"}
+        request={"name": "projects/f2023-ece528-bates-travis/secrets/DATABASE_PASSWORD/versions/latest"}
     ).payload.data.decode("UTF-8")
 
 
@@ -92,7 +92,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins = [
         "http://localhost:5173",
-        "https://gains-tracker-ui-dot-f2023-ece528-group7.ue.r.appspot.com"
+        "https://gains-tracker-ui-dot-f2023-ece528-bates-travis.ue.r.appspot.com/"
     ],
     allow_credentials=True,
     allow_methods=["*"],
