@@ -64,7 +64,7 @@ const App = () => {
             </Toolbar>
         </AppBar>
         <SideNav open={ open } closeDrawer={ closeDrawer } handleNavigate={handleNavigate}/>
-        <Container>
+        <Container className={"main-container"}>
             <Routes>
                 <Route path="/" element={<p>
                     Welcome to Gains Tracker! At Gains Tracker, you can upload your transactions and get reports that can help you with filing taxes.

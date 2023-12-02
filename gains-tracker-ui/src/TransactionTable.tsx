@@ -52,6 +52,7 @@ const TransactionTable: React.FC = () => {
     return (
         <>
             <TransactionUpload refreshTransactions={refreshTransactions}></TransactionUpload>
+            <h2>Transactions</h2>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

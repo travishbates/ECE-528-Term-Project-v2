@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Button, TextField} from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 export default function ForgotPassword() {
     const emailRef = useRef()
@@ -36,19 +37,25 @@ export default function ForgotPassword() {
                     {error && <Alert variant="danger">{error}</Alert>}
                     {message && <Alert variant="success">{message}</Alert>}
                     <form onSubmit={handleSubmit}>
-                        <TextField inputRef={emailRef} label="email" variant="outlined" />
-                        <Button disabled={loading} className="w-100" type="submit">
-                            Reset Password
-                        </Button>
+                        <Grid container direction={"column"} spacing={1}>
+                            <Grid item>
+                                <TextField inputRef={emailRef} label="email" variant="outlined" />
+                            </Grid>
+                            <Grid item>
+                                <Button disabled={loading} className="w-100" type="submit" variant="contained">
+                                    Reset Password
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </form>
                     <div className="w-100 text-center mt-3">
-                        <Link to="/login">Login</Link>
+                        <Link to="/login">Back to login</Link>
+                    </div>
+                    <div className="w-100 text-center mt-2">
+                        Need an account? <Link to="/signup">Sign Up</Link>
                     </div>
                 </CardContent>
             </Card>
-            <div className="w-100 text-center mt-2">
-                Need an account? <Link to="/signup">Sign Up</Link>
-            </div>
         </>
     )
 }

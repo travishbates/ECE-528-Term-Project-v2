@@ -5,6 +5,7 @@ import {Button, TextField} from "@mui/material";
 import { useAuth } from "./AuthContext"
 import {Link, useNavigate} from "react-router-dom"
 import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
 
 export default function Signup() {
     const emailRef = useRef()
@@ -41,18 +42,28 @@ export default function Signup() {
                     <h2 className="text-center mb-4">Sign Up</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
                     <form onSubmit={handleSubmit}>
-                        <TextField inputRef={emailRef} label="email" variant="outlined" />
-                        <TextField inputRef={passwordRef} label="password" type="password" variant="outlined" />
-                        <TextField inputRef={passwordConfirmRef} label="password-confirm" type="password" variant="outlined" />
-                        <Button disabled={loading} className="w-100" type="submit">
-                            Sign Up
-                        </Button>
+                        <Grid container direction={"column"} spacing={1}>
+                            <Grid item>
+                                <TextField inputRef={emailRef} label="email" variant="outlined" />
+                            </Grid>
+                            <Grid item>
+                                <TextField inputRef={passwordRef} label="password" type="password" variant="outlined" />
+                            </Grid>
+                            <Grid item>
+                                <TextField inputRef={passwordConfirmRef} label="password-confirm" type="password" variant="outlined" />
+                            </Grid>
+                            <Grid item>
+                                <Button disabled={loading} className="w-100" type="submit" variant="contained">
+                                    Sign Up
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </form>
+                    <div className="w-100 text-center mt-2">
+                        Already have an account? <Link to="/login">Log In</Link>
+                    </div>
                 </CardContent>
             </Card>
-            <div className="w-100 text-center mt-2">
-                Already have an account? <Link to="/login">Log In</Link>
-            </div>
         </>
     )
 }

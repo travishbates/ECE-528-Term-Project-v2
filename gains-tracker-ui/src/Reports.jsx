@@ -5,7 +5,7 @@ function Reports() {
 
     return (
         <>
-            <p>Request a report.</p>
+            <h2>Request a New Report</h2>
             <ReportTable />
         </>
     )

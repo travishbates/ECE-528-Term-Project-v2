@@ -14,6 +14,7 @@ import TablePagination from "@mui/material/TablePagination";
 // @ts-ignore
 import { requestReport } from './backendService';
 import {DatePicker} from "@mui/x-date-pickers";
+import Grid from "@mui/material/Grid";
 
 const TransactionTable: React.FC = () => {
     const [reports, setReports] = React.useState([]);
@@ -63,20 +64,31 @@ const TransactionTable: React.FC = () => {
     return (
         <>
             <form onSubmit={handleSubmit}>
-                <DatePicker
-                    label="Start Date"
-                    onChange={(date) => setStartDate(date)}
-                />
-                <DatePicker
-                    label="End Date"
-                    onChange={(date) => setEndDate(date)}
-                />
-                <Button
-                    type="submit"
-                >
-                    Submit
-                </Button>
+                <Grid container direction={"row"} spacing={2}>
+                    <Grid item>
+                        <DatePicker
+                            label="Start Date"
+                            onChange={(date) => setStartDate(date)}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <DatePicker
+                            label="End Date"
+                            onChange={(date) => setEndDate(date)}
+                        />
+                    </Grid>
+                    <Grid item>
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                        >
+                            Request report
+                        </Button>
+                    </Grid>
+                </Grid>
             </form>
+            <h2>Report History</h2>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -98,7 +110,7 @@ const TransactionTable: React.FC = () => {
                                 <TableCell>
                                     {
                                         report.status === 'complete' &&
-                                        <Button color="inherit" onClick={() => handleDownload(report.id)}>Download</Button>
+                                        <Button color="inherit" onClick={() => handleDownload(report.id)} variant="contained">Download</Button>
                                     }
                                 </TableCell>
                             </TableRow>

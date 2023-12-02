@@ -4,6 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
+import {useAuth} from "./AuthContext";
 
 interface SideNavProps {
     open: boolean,
@@ -11,6 +12,8 @@ interface SideNavProps {
     handleNavigate: (route: string) => void
 }
 const SideNav: React.FC<SideNavProps> = ({ open, closeDrawer, handleNavigate }) => {
+    const { currentUser, logout } = useAuth()
+
     return (
         <>
             <Drawer
@@ -26,9 +29,8 @@ const SideNav: React.FC<SideNavProps> = ({ open, closeDrawer, handleNavigate }) 
                 </IconButton>
                 <List>
                     <ListItemButton onClick={() => handleNavigate("./")}>Home</ListItemButton>
-                    <ListItemButton onClick={() => handleNavigate("./transactions")}>Transactions</ListItemButton>
-                    <ListItemButton onClick={() => handleNavigate("./reports")}>Reports</ListItemButton>
-                    {/*<ListItemButton onClick={() => handleNavigate("./chat")}>Chat</ListItemButton>*/}
+                    { currentUser && <ListItemButton onClick={() => handleNavigate("./transactions")}>Transactions</ListItemButton> }
+                    { currentUser && <ListItemButton onClick={() => handleNavigate("./reports")}>Reports</ListItemButton> }
                 </List>
             </Drawer>
         </>

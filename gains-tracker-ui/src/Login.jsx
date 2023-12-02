@@ -6,6 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import {Button, TextField} from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom"
+import Grid from "@mui/material/Grid";
 
 export default function Login() {
     const emailRef = useRef()
@@ -32,26 +33,33 @@ export default function Login() {
 
     return (
         <>
-            <p>login</p>
             <Card>
                 <CardContent>
                             <h2 className="">Log In</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <form onSubmit={handleSubmit}>
-                                <TextField inputRef={emailRef} label="email" variant="outlined" />
-                                <TextField inputRef={passwordRef} label="password" type="password" variant="outlined" />
-                                <Button disabled={loading} className="w-100" type="submit">
-                                    Log In
-                                </Button>
+                                    <Grid container direction={"column"} spacing={1}>
+                                        <Grid item>
+                                            <TextField inputRef={emailRef} label="email" variant="outlined" />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField inputRef={passwordRef} label="password" type="password" variant="outlined" />
+                                        </Grid>
+                                        <Grid item>
+                                            <Button disabled={loading} className="w-100" type="submit" variant="contained">
+                                                Log In
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
                             </form>
                             <div className="w-100 text-center mt-3">
                                 <Link to="/forgot-password">Forgot Password?</Link>
                             </div>
+                            <div className="w-100 text-center mt-2">
+                                Need an account? <Link to="/signup">Sign Up</Link>
+                            </div>
                 </CardContent>
             </Card>
-            <div className="w-100 text-center mt-2">
-                Need an account? <Link to="/signup">Sign Up</Link>
-            </div>
         </>
     )
 }
