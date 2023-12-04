@@ -6,12 +6,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import {useAuth} from "./AuthContext";
 
-interface SideNavProps {
-    open: boolean,
-    closeDrawer: () => void,
-    handleNavigate: (route: string) => void
-}
-const SideNav: React.FC<SideNavProps> = ({ open, closeDrawer, handleNavigate }) => {
+const SideNav = ({ open, closeDrawer, handleNavigate }) => {
     const { currentUser, logout } = useAuth()
 
     return (

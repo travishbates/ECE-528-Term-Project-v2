@@ -13,10 +13,9 @@ import { deleteTransaction, getTransactions } from "./backendService";
 import TablePagination from "@mui/material/TablePagination";
 import TransactionUpload from "./TransactionUpload";
 import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-const TransactionTable: React.FC = () => {
+const TransactionTable = () => {
     const [transactions, setTransactions] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [count, setCount] = React.useState(0);
@@ -27,18 +26,18 @@ const TransactionTable: React.FC = () => {
         refreshTransactions();
     }, [page, rowsPerPage]);
 
-    function handleDeleteTransaction(transactionId: any) {
+    function handleDeleteTransaction(transactionId) {
         deleteTransaction(transactionId)
             .then(() => {
                 refreshTransactions();
             });
     }
 
-    const handlePageChange = (_event: any, page: any) => {
+    const handlePageChange = (_event, page) => {
         setPage(page);
     }
 
-    const handleRowsPerPageChange = (event: any) => {
+    const handleRowsPerPageChange = (event) => {
         setRowsPerPage(event.target.value);
         setPage(0);
     }
@@ -46,7 +45,7 @@ const TransactionTable: React.FC = () => {
     function refreshTransactions() {
         setLoading(true);
         getTransactions(page, rowsPerPage)
-            .then((result: any) => {
+            .then((result) => {
                 setTransactions(result.results);
                 setCount(result.count);
                 setPage(result.page);
@@ -80,7 +79,7 @@ const TransactionTable: React.FC = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {transactions.map((transaction: any) => (
+                                {transactions.map((transaction) => (
                                     <TableRow key={transaction.id}>
                                         <TableCell>{transaction.time_transacted}</TableCell>
                                         <TableCell>{transaction.transaction_type}</TableCell>
