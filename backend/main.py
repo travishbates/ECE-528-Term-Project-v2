@@ -102,8 +102,8 @@ app.add_middleware(
 @app.get("/transactions")
 def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
     database = Session()
-    database_results = database.query(Transaction).filter_by(id=id, user_id=user["user_id"]).offset(page * pageSize).limit(pageSize).all()
-    count = database.query(func.count(Transaction.id)).filter_by(id=id, user_id=user["user_id"]).scalar()
+    database_results = database.query(Transaction).filter_by(user_id=user["user_id"]).offset(page * pageSize).limit(pageSize).all()
+    count = database.query(func.count(Transaction.id)).filter_by(user_id=user["user_id"]).scalar()
     database.close()
     return {
         "count": count,
@@ -116,8 +116,8 @@ def get_transactions(page: int = 0, pageSize: int = 10, user = Depends(get_fireb
 @app.get("/reports")
 def get_reports(page: int = 0, pageSize: int = 10, user = Depends(get_firebase_user)):
     database = Session()
-    database_results = database.query(Report).filter_by(id=id, user_id=user["user_id"]).order_by(desc(Report.requested_date)).offset(page * pageSize).limit(pageSize).all()
-    count = database.query(func.count(Report.id)).filter_by(id=id, user_id=user["user_id"]).scalar()
+    database_results = database.query(Report).filter_by(user_id=user["user_id"]).order_by(desc(Report.requested_date)).offset(page * pageSize).limit(pageSize).all()
+    count = database.query(func.count(Report.id)).filter_by(user_id=user["user_id"]).scalar()
     database.close()
     return {
         "count": count,
